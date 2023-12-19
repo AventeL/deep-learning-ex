@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 EPOCHS = 10
 IMG_WIDTH = 30
 IMG_HEIGHT = 30
-NUM_CATEGORIES = 43
+NUM_CATEGORIES = 3
 TEST_SIZE = 0.4
 
 
@@ -44,22 +44,21 @@ def main():
         print(f"Model saved to {filename}.")
 
 
-def load_data(data_dir):
-    """
-    Load image data from directory `data_dir`.
-
-    Assume `data_dir` has one directory named after each category, numbered
-    0 through NUM_CATEGORIES - 1. Inside each category directory will be some
-    number of image files.
-
-    Return tuple `(images, labels)`. `images` should be a list of all
-    of the images in the data directory, where each image is formatted as a
-    numpy ndarray with dimensions IMG_WIDTH x IMG_HEIGHT x 3. `labels` should
-    be a list of integer labels, representing the categories for each of the
-    corresponding `images`.
-    """
-    raise NotImplementedError
-
+def load_data(data_dir):    
+    images = []
+    labels = []
+    
+    for i in range(NUM_CATEGORIES):
+        for image in os.listdir(os.path.join(data_dir, str(i))):
+            img = cv2.imread(os.path.join(data_dir, str(i), image))
+            img = cv2.resize(img, (IMG_WIDTH, IMG_HEIGHT))
+            images.append(img)
+            labels.append(i)
+    
+    print(images)
+    
+    return(images, labels)
+    
 
 def get_model():
     """
@@ -67,6 +66,7 @@ def get_model():
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
+    
     raise NotImplementedError
 
 
